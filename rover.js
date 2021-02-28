@@ -3,7 +3,6 @@ const Message = require('./message.js');
 
 class Rover {
   constructor(position, mode, generatorWatts) {
-    
     this.position = position;
     if (!position) {
       throw Error("Position required.");
@@ -13,11 +12,7 @@ class Rover {
   }
 
   receiveMessage(message) {
-
-    
-
     let statusObj = {};
-
     let resultObj = {
       message: message.name,
       results: []
@@ -26,69 +21,55 @@ class Rover {
     rover.mode = 'NORMAL';
 
     for (let i=0; i<message.commands.length; i++){
-   
       if (message.commands[i].commandType == 'MOVE') {
-   
         if (rover.mode == 'LOW_POWER') {
             statusObj = {
-            completed: false,
-            roverStatus: {
-            position: rover.position,
-            mode: rover.mode,
-            generatorWatts: rover.generatorWatts
-      }
-    };
-          
+              completed: false,
+              roverStatus: {
+                position: rover.position,
+                mode: rover.mode,
+                generatorWatts: rover.generatorWatts
+              }
+            };
           resultObj.results.push(statusObj);
-        }
+         }
         else {
-        statusObj = {
+          statusObj = {
             completed: true,
             roverStatus: {
-            position: message.commands[i].value,
-            mode: rover.mode,
-            generatorWatts: rover.generatorWatts
-      }
-    };
-
-          
+              position: message.commands[i].value,
+              mode: rover.mode,
+              generatorWatts: rover.generatorWatts
+            }
+          };
+          statusObj.completed = true;
+          rover.position = message.commands[i].value;
           resultObj.results.push(statusObj);
-
-
-
-
-        statusObj.completed = true;
-        resultObj.results.push(statusObj);
-        rover.position = message.commands[i].value;
         }
       }
 
       else if (message.commands[i].commandType == 'STATUS_CHECK'){
-
-          statusObj = {
-            completed: true,
-            roverStatus: {
+        statusObj = {
+          completed: true,
+          roverStatus: {
             position: rover.position,
             mode: rover.mode,
             generatorWatts: rover.generatorWatts
-      }
-    };
-        resultObj.results.push(statusObj);
-
+          }
+         };
+         resultObj.results.push(statusObj);
       }
 
       else if (message.commands[i].commandType == 'MODE_CHANGE'){
-
         rover.mode = message.commands[i].value;
-
         statusObj = {
-            completed: true,
-            roverStatus: {
+          completed: true,
+          roverStatus: {
             position: rover.position,
             mode: message.commands[i].value,
             generatorWatts: rover.generatorWatts
-      }
-    };
+          }
+        };
         resultObj.results.push(statusObj);    
       }
     };
@@ -101,6 +82,7 @@ let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'LOW_POW
 let message = new Message('Test message with two commands', commands);
 
 let rover = new Rover(98382);
+
 let response = rover.receiveMessage(message);
 
 console.log(response);
