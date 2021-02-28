@@ -1,15 +1,5 @@
-//const Command = require('./command.js');
+const Command = require('./command.js');
 const Message = require('./message.js');
-
-class Command {
-  constructor(commandType, value) {
-    this.commandType = commandType;
-    if (!commandType) {
-      throw Error("Command type required.");
-    }
-    this.value = value;
-  }
-}
 
 class Rover {
   constructor(position, mode, generatorWatts) {

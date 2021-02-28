@@ -1,6 +1,5 @@
-const Message = require('./message.js');
-const Rover = require('./rover.js');
-
+//const Message = require('./message.js');
+//const Rover = require('./rover.js');
 
 class Command {
   constructor(commandType, value) {
