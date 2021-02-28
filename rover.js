@@ -17,12 +17,15 @@ class Rover {
       message: message.name,
       results: []
     };
+    let onlyCompleted = {
+      completed: statusObj.completed
+    };
 
     rover.mode = 'NORMAL';
 
     for (let i=0; i<message.commands.length; i++){
       if (message.commands[i].commandType == 'MOVE') {
-        if (rover.mode == 'LOW_POWER') {
+        if (this.mode == 'LOW_POWER') {
             statusObj = {
               completed: false,
               roverStatus: {
@@ -31,9 +34,13 @@ class Rover {
                 generatorWatts: rover.generatorWatts
               }
             };
-          resultObj.results.push(statusObj);
+             onlyCompleted = {
+             completed: false
+             };
+          resultObj.results.push(onlyCompleted);
          }
         else {
+          this.position = message.commands[i].value;
           statusObj = {
             completed: true,
             roverStatus: {
@@ -44,7 +51,10 @@ class Rover {
           };
           statusObj.completed = true;
           rover.position = message.commands[i].value;
-          resultObj.results.push(statusObj);
+          onlyCompleted = {
+             completed: true
+             };
+          resultObj.results.push(onlyCompleted);
         }
       }
 
@@ -61,7 +71,7 @@ class Rover {
       }
 
       else if (message.commands[i].commandType == 'MODE_CHANGE'){
-        rover.mode = message.commands[i].value;
+        this.mode = message.commands[i].value;
         statusObj = {
           completed: true,
           roverStatus: {
@@ -70,7 +80,10 @@ class Rover {
             generatorWatts: rover.generatorWatts
           }
         };
-        resultObj.results.push(statusObj);    
+        onlyCompleted = {
+             completed: true
+             };
+          resultObj.results.push(onlyCompleted);   
       }
     };
   return resultObj;

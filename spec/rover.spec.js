@@ -52,20 +52,21 @@ describe("Rover class", function() {
     let rov = new Rover(98382);
     let msg = new Message('Test message with mode change', com);
     let output = rov.receiveMessage(msg);
-    assert.strictEqual(output.results[0].roverStatus.mode, 'LOW_POWER');
+    assert.strictEqual(rov.mode, 'LOW_POWER');
   });
 });
 
 describe("Rover class", function() {
   it("responds with false completed value when attempting to move in LOW_POWER mode", function() {
     let rov = new Rover(98382); 
-    let com = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', '98765')];
+    rov.mode = 'LOW_POWER';
+    let com = [new Command('MODE_CHANGE', 'LOW_POWER'),  new Command('MOVE', '98765')];
     let msg = new Message('Test competed = false with move change on LOW', com);
     let output = rov.receiveMessage(msg);
     let checkObject = {
       'completed':false, 
     };
-    assert.equal(output.results[1].completed.toString(), checkObject.completed.toString())
+    assert.equal(output.results[1].completed.toString(), checkObject.completed.toString());
   });
 })
 
@@ -75,6 +76,6 @@ describe("Rover class", function() {
     let rov = new Rover(13579, 'NORMAL');
     let msg = new Message('Test message with mode change', com);
     let output = rov.receiveMessage(msg);
-    assert.strictEqual(output.results[0].roverStatus.position, 24680)
+    assert.strictEqual(rov.position, 24680);
   });
 });
