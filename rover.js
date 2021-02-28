@@ -1,4 +1,5 @@
 const Command = require('./command.js');
+const Message = require('./message.js');
 
 class Rover {
   constructor(position, mode, generatorWatts) {
@@ -7,11 +8,12 @@ class Rover {
     if (!position) {
       throw Error("Command type required.");
     }
-    this.mode = 'NORMAL';
-    this.generatorWatts = 110; 
+   // this.mode = 'NORMAL';
+    //this.generatorWatts = 110; 
   }
 
   receiveMessage(message) {
+    //let rover1 =  new Rover()
     let modeObj = {
     completed: false
     };
@@ -21,9 +23,9 @@ class Rover {
     let statusObj = {
     completed: false,
     roverStatus: {
-      //position: this.position,
-      //mode: this.mode,
-      //generatorWatts: this.generatorWatts
+      position: this.position,
+      mode: this.mode,
+      generatorWatts: this.generatorWatts
     }
     };
 
@@ -37,7 +39,7 @@ class Rover {
     for (let i=0; i<message.commands.length; i++){
       if (message.commands[i].commandType == "MOVE") {
         if (this.mode == "LOW_POWER") {
-          modeObj.completed = false;
+          modeObj.completed = true;
           resultObj.results.push(modeObj);
         }
         else {
@@ -49,9 +51,12 @@ class Rover {
 
       else if (message.commands[i].commandType == "STATUS_CHECK"){
         statusObj.completed = true;
-        statusObj.roverStatus = this;
+        //statusObj.roverStatus = this;
         //resultObj.results.push(Object.keys(statusObj)[0], statusObj.completed, Object.keys(statusObj)[1], statusObj.roverStatus);
-     resultObj.results.push(Object.keys(statusObj)[0], statusObj.completed, Object.keys(statusObj)[1], statusObj.roverStatus);
+     //resultObj.results.push(Object.keys(statusObj)[0], statusObj.completed, Object.keys(statusObj)[1], statusObj.roverStatus);
+     resultObj.results.push(statusObj);
+     console.log(statusObj);
+
       }
 
       else if (message.commands[i].commandType == "MODE_CHANGE"){
@@ -65,6 +70,19 @@ class Rover {
   }
   //return resultObj;
 }
+
+//let modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
+//let moveCommand = new Command('MOVE', 1200);
+let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), new Command('MOVE', 32123), new Command('STATUS_CHECK')];
+
+let message = new Message('Test message with two commands', commands);
+
+let rover = new Rover(98382);
+let response = rover.receiveMessage(message);
+
+console.log('message:', response.message, ', \nresults:', response.results);
+console.log("output",response);
+
 module.exports = Rover;
 
 

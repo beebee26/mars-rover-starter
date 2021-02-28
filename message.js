@@ -1,3 +1,6 @@
+const Command = require('./command.js');
+const Rover = require('./rover.js');
+
 //Bundle commands from mission control and send them to the rover.
 class Message {
   constructor(name, commands) { 
