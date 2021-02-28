@@ -1,5 +1,7 @@
 const assert = require('assert');
 const Message = require('../message.js');
+const Rover = require('../rover.js');
+const Command = require('../command.js');
 
 describe("Message class", function() {
 
