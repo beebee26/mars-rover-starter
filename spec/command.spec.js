@@ -1,10 +1,8 @@
 const assert = require('assert');
 const Command = require('../command.js');
-const Rover = require('../rover.js');
-const Message = require('../message.js');
 
 describe("Command class", function() {
-
+//Test 1
   it("throws error if command type is NOT passed into constructor as the first parameter", function() {
     assert.throws(
       function() {
@@ -16,6 +14,8 @@ describe("Command class", function() {
     );
   });
 });
+
+//Test 2
 describe("Command class", function() {
 
   it("constructor sets command type", function() {
@@ -23,6 +23,8 @@ describe("Command class", function() {
       assert.strictEqual(output, "MOVE");
    });
 });
+
+//Test 3
 describe("Command class", function() {
 
   it("constructor sets a value passed by the second arguement", function() {
